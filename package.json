@@ -1,0 +1,383 @@
+{
+  "name": "vs-worktree-view",
+  "displayName": "Worktree View",
+  "description": "A lightweight git worktree board in Source Control: see what every AI agent worktree (Claude, Codex, Cursor, .agent…) changed and diff it natively. 轻量 worktree 看板，原生 diff 对比各个 AI worktree 的改动。",
+  "version": "0.1.0",
+  "publisher": "langchou",
+  "license": "MIT",
+  "icon": "media/logo.png",
+  "author": {
+    "name": "langchou"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/langchou/vs-worktree-view.git"
+  },
+  "bugs": {
+    "url": "https://github.com/langchou/vs-worktree-view/issues"
+  },
+  "homepage": "https://github.com/langchou/vs-worktree-view#readme",
+  "keywords": [
+    "git",
+    "worktree",
+    "diff",
+    "claude",
+    "ai agent",
+    "codex",
+    "scm"
+  ],
+  "galleryBanner": {
+    "color": "#1b2335",
+    "theme": "dark"
+  },
+  "engines": {
+    "vscode": "^1.88.0"
+  },
+  "categories": [
+    "SCM Providers",
+    "Other"
+  ],
+  "main": "./src/extension.js",
+  "activationEvents": [
+    "workspaceContains:.git",
+    "onView:worktreeView.list"
+  ],
+  "contributes": {
+    "views": {
+      "scm": [
+        {
+          "id": "worktreeView.list",
+          "name": "Worktrees",
+          "icon": "media/icon.svg",
+          "contextualTitle": "Worktree View"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "worktreeView.list",
+        "contents": "当前窗口没有打开 git 仓库。\n[打开文件夹](command:vscode.openFolder)"
+      }
+    ],
+    "commands": [
+      {
+        "command": "worktreeView.refresh",
+        "title": "刷新",
+        "category": "Worktree",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "worktreeView.compare",
+        "title": "对比两个分支…",
+        "category": "Worktree",
+        "icon": "$(git-compare)"
+      },
+      {
+        "command": "worktreeView.setBase",
+        "title": "统一设置所有 worktree 的对比基准…",
+        "category": "Worktree",
+        "icon": "$(target)"
+      },
+      {
+        "command": "worktreeView.viewAsTree",
+        "title": "以树形式查看",
+        "category": "Worktree",
+        "icon": "$(list-tree)"
+      },
+      {
+        "command": "worktreeView.viewAsList",
+        "title": "以列表形式查看",
+        "category": "Worktree",
+        "icon": "$(list-flat)"
+      },
+      {
+        "command": "worktreeView.toggleMode",
+        "title": "切换对比模式（merge-base / 直接对比）",
+        "category": "Worktree",
+        "icon": "$(arrow-swap)"
+      },
+      {
+        "command": "worktreeView.openAllChanges",
+        "title": "查看全部改动",
+        "category": "Worktree",
+        "icon": "$(diff-multiple)"
+      },
+      {
+        "command": "worktreeView.compareWith",
+        "title": "与其他分支对比…",
+        "category": "Worktree",
+        "icon": "$(git-compare)"
+      },
+      {
+        "command": "worktreeView.removeCompare",
+        "title": "移除这个对比",
+        "category": "Worktree",
+        "icon": "$(close)"
+      },
+      {
+        "command": "worktreeView.openFileDiff",
+        "title": "查看 diff",
+        "category": "Worktree"
+      },
+      {
+        "command": "worktreeView.openFile",
+        "title": "打开文件",
+        "category": "Worktree",
+        "icon": "$(go-to-file)"
+      },
+      {
+        "command": "worktreeView.openInNewWindow",
+        "title": "在新窗口打开",
+        "category": "Worktree",
+        "icon": "$(empty-window)"
+      },
+      {
+        "command": "worktreeView.openTerminal",
+        "title": "在终端打开",
+        "category": "Worktree",
+        "icon": "$(terminal)"
+      },
+      {
+        "command": "worktreeView.revealInFinder",
+        "title": "在访达中显示",
+        "category": "Worktree"
+      },
+      {
+        "command": "worktreeView.copyPath",
+        "title": "复制路径",
+        "category": "Worktree"
+      },
+      {
+        "command": "worktreeView.copyBranch",
+        "title": "复制分支名",
+        "category": "Worktree"
+      },
+      {
+        "command": "worktreeView.setWorktreeBase",
+        "title": "设置对比基准…",
+        "category": "Worktree",
+        "icon": "$(target)"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "worktreeView.compare",
+          "when": "view == worktreeView.list",
+          "group": "navigation@1"
+        },
+        {
+          "command": "worktreeView.setBase",
+          "when": "view == worktreeView.list",
+          "group": "navigation@2"
+        },
+        {
+          "command": "worktreeView.viewAsTree",
+          "when": "view == worktreeView.list && worktreeView.fileLayout == list",
+          "group": "navigation@2.5"
+        },
+        {
+          "command": "worktreeView.viewAsList",
+          "when": "view == worktreeView.list && worktreeView.fileLayout != list",
+          "group": "navigation@2.5"
+        },
+        {
+          "command": "worktreeView.refresh",
+          "when": "view == worktreeView.list",
+          "group": "navigation@3"
+        },
+        {
+          "command": "worktreeView.toggleMode",
+          "when": "view == worktreeView.list",
+          "group": "more@1"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "worktreeView.openAllChanges",
+          "when": "view == worktreeView.list && viewItem =~ /^(worktree|compare)/",
+          "group": "inline@1"
+        },
+        {
+          "command": "worktreeView.compareWith",
+          "when": "view == worktreeView.list && viewItem =~ /^worktree/",
+          "group": "inline@2"
+        },
+        {
+          "command": "worktreeView.openInNewWindow",
+          "when": "view == worktreeView.list && viewItem == worktree",
+          "group": "inline@3"
+        },
+        {
+          "command": "worktreeView.removeCompare",
+          "when": "view == worktreeView.list && viewItem == compare",
+          "group": "inline@9"
+        },
+        {
+          "command": "worktreeView.openFile",
+          "when": "view == worktreeView.list && viewItem == file",
+          "group": "inline@1"
+        },
+        {
+          "command": "worktreeView.openAllChanges",
+          "when": "view == worktreeView.list && viewItem =~ /^worktree/",
+          "group": "1_view@1"
+        },
+        {
+          "command": "worktreeView.compareWith",
+          "when": "view == worktreeView.list && viewItem =~ /^worktree/",
+          "group": "1_view@2"
+        },
+        {
+          "command": "worktreeView.setWorktreeBase",
+          "when": "view == worktreeView.list && viewItem =~ /^worktree/",
+          "group": "1_view@3"
+        },
+        {
+          "command": "worktreeView.openInNewWindow",
+          "when": "view == worktreeView.list && viewItem =~ /^worktree/",
+          "group": "2_open@1"
+        },
+        {
+          "command": "worktreeView.openTerminal",
+          "when": "view == worktreeView.list && viewItem =~ /^worktree/",
+          "group": "2_open@2"
+        },
+        {
+          "command": "worktreeView.revealInFinder",
+          "when": "view == worktreeView.list && viewItem =~ /^worktree/",
+          "group": "2_open@3"
+        },
+        {
+          "command": "worktreeView.copyPath",
+          "when": "view == worktreeView.list && viewItem =~ /^worktree/",
+          "group": "3_copy@1"
+        },
+        {
+          "command": "worktreeView.copyBranch",
+          "when": "view == worktreeView.list && viewItem =~ /^worktree/",
+          "group": "3_copy@2"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "worktreeView.openAllChanges",
+          "when": "false"
+        },
+        {
+          "command": "worktreeView.compareWith",
+          "when": "false"
+        },
+        {
+          "command": "worktreeView.removeCompare",
+          "when": "false"
+        },
+        {
+          "command": "worktreeView.openFileDiff",
+          "when": "false"
+        },
+        {
+          "command": "worktreeView.openFile",
+          "when": "false"
+        },
+        {
+          "command": "worktreeView.openInNewWindow",
+          "when": "false"
+        },
+        {
+          "command": "worktreeView.openTerminal",
+          "when": "false"
+        },
+        {
+          "command": "worktreeView.revealInFinder",
+          "when": "false"
+        },
+        {
+          "command": "worktreeView.copyPath",
+          "when": "false"
+        },
+        {
+          "command": "worktreeView.copyBranch",
+          "when": "false"
+        },
+        {
+          "command": "worktreeView.setWorktreeBase",
+          "when": "false"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Worktree View",
+      "properties": {
+        "worktreeView.baseBranch": {
+          "type": "string",
+          "default": "",
+          "description": "强制所有 worktree 都和这个分支比。留空（推荐）则自动推断每个 worktree 是从哪个分支拉出来的；主工作区始终只看未提交改动。"
+        },
+        "worktreeView.compareMode": {
+          "type": "string",
+          "enum": [
+            "mergeBase",
+            "direct"
+          ],
+          "enumDescriptions": [
+            "和分叉点（merge-base）比：只显示这个分支自己的改动，基准分支后来的提交不会混进来",
+            "直接和基准分支最新代码比"
+          ],
+          "default": "mergeBase",
+          "description": "worktree / 分支与基准的对比方式。"
+        },
+        "worktreeView.autoRefreshSeconds": {
+          "type": "number",
+          "default": 10,
+          "minimum": 0,
+          "description": "视图可见时自动刷新的间隔（秒），0 表示关闭。"
+        },
+        "worktreeView.sourcePatterns": {
+          "type": "array",
+          "default": [],
+          "description": "按路径识别 worktree 来自哪个工具，优先于内置规则（内置已识别 .claude、.agent、.agents、.codex、.cursor、.gemini、.worktrees、conductor）。",
+          "items": {
+            "type": "object",
+            "required": [
+              "pattern",
+              "label"
+            ],
+            "properties": {
+              "pattern": {
+                "type": "string",
+                "description": "路径片段，例如 /.windsurf/"
+              },
+              "regex": {
+                "type": "boolean",
+                "default": false,
+                "description": "pattern 是否按正则匹配"
+              },
+              "label": {
+                "type": "string",
+                "description": "显示名，例如 Windsurf"
+              },
+              "icon": {
+                "type": "string",
+                "description": "codicon 名称，例如 robot、sparkle"
+              }
+            }
+          }
+        },
+        "worktreeView.fileLayout": {
+          "type": "string",
+          "enum": [
+            "tree",
+            "list"
+          ],
+          "enumDescriptions": [
+            "按目录树展示改动文件",
+            "平铺展示，目录写在文件名后面"
+          ],
+          "default": "tree",
+          "description": "改动文件的展示方式。"
+        }
+      }
+    }
+  }
+}
